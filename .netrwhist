@@ -1,0 +1,8 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =6
+let g:netrw_dirhist_6='/home/pi/.local/share/nvim/site/pack/packer/start'
+let g:netrw_dirhist_5='/home/pi/.local/share/nvim/site/pack/packer'
+let g:netrw_dirhist_4='/home/pi/.local/share/nvim/site/pack'
+let g:netrw_dirhist_3='/home/pi/.local/share/nvim/site'
+let g:netrw_dirhist_2='/home/pi/.local/share/nvim'
+let g:netrw_dirhist_1='/home/pi/.local/share'
