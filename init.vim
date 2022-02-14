@@ -38,8 +38,7 @@ if !empty(glob(stdpath('config') . "/.installed"))
 	call LoadAllConfig()
 else
 	if RunInstallScript() == 1
-		call LoadConfig()
-		PlugInstall
+		call ReloadConfig()
 	endif
 endif
 
