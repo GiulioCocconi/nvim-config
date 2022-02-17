@@ -3,7 +3,22 @@ let s:core_files = ['bindings.vim', 'plugins.vim', 'core.vim']
 let s:install_unix_script = stdpath('config') . '/install.sh'
 let s:install_check = stdpath('config') . '/.installed'
 
-let g:init_debug = 0 
+let s:debug_file = stdpath('config') . '/.debug'
+
+function CheckDebug()
+	let g:init_debug = !empty(glob(s:debug_file))
+endfunction
+
+function ToggleDebug()
+	if g:init_debug
+		echom "Debug deactivated"
+		silent! execute "!rm " . s:debug_file
+	else
+		echom "Debug activated"
+		silent! execute "!touch " . s:debug_file
+	endif
+	call CheckDebug()
+endfunction
 
 function Debug(msg)
 	if g:init_debug == 1
@@ -20,7 +35,7 @@ function LoadAllConfig()
 	for l:fname in s:core_files
 		call LoadVimFile(l:fname)
 		call Debug(l:fname . " Loaded")
-	endfor	
+	endfor
 	echom "Configuration files loaded!"
 endfunction
 
@@ -45,7 +60,7 @@ function ReloadConfig(install_plugins)
 endfunction
 
 " Entry Point
-
+call CheckDebug()
 call Debug("Checking for the presence of " . s:install_check)
 if !empty(glob(s:install_check))
 	call Debug(s:install_check . " found")

@@ -12,7 +12,10 @@ map <leader>t :terminal<CR>
 map <leader>qa :qall<CR>
 map <leader>wa :wall<CR>
 
-map <leader>ff :Files<CR>
+map <leader>cR :call ReloadConfig(0)<CR>
+
+map <leader>ff :call FindFileInCurrentDir()<CR>
+map <leader>fF :Files<CR>
 map <leader>fb :Buffers<CR>
 map <leader>fc :Colors<CR>
 map <leader>ft :Tags<CR>

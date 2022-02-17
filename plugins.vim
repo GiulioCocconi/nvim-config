@@ -1,17 +1,18 @@
 augroup packer_user_config
-  autocmd!
-  autocmd BufWritePost plugins.vim source <afile> | PlugInstall
+	autocmd!
+	autocmd BufWritePost plugins.vim source <afile> | PlugInstall
 augroup end
 
 call plug#begin(stdpath('data') . '/plugins')
 call Debug("Plug begin")
+
 "Ide-like functionality
 
 Plug 'vim-syntastic/syntastic'
-Plug 'jayli/vim-easycomplete'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-
+Plug 'majutsushi/tagbar'
 Plug 'jiangmiao/auto-pairs'
 
 "Greeter
@@ -41,8 +42,38 @@ let g:airline_symbols_ascii = 1
 let g:airline#extensions#tabline#enabled = 1
 
 "FZF's config
-function FindFileInDirectory() 
-	let l:fpath = split(@%, "/");
-	return join(l:fpath[0:-2], "/")
+function FindFileInCurrentDir()
+	let l:current_fdir = CurrentFileParentDir(0)
+	call Debug("Dir is " . l:current_fdir)
+	execute ':Files ' . l:current_fdir
 endfunction
 
+function FindFileInParentDir()
+	let l:current_fdir = CurrentFileParentDir(0)
+	
+	call inputsave()
+	let l:level = input(printf("Subdir level to search in (%s): ", l:current_fdir))
+	call inputrestore()
+
+	let l:search_dir = CurrentFileParentDir(l:level)
+
+	execute ':Files ' . l:search_dir
+endfunction
+
+function FindFileInput()
+	call inputsave()
+	let l:fdir = input("Search in dir: ")
+	call inputrestore()
+	execute ':Files ' . l:fdir
+endfunction
+
+map <leader>ff :call FindFileInCurrentDir()<CR>
+map <leader>fF :Files<CR>
+map <leader>fb :Buffers<CR>
+map <leader>fc :Colors<CR>
+map <leader>ft :Tags<CR>
+map <leader>fC :Commands<CR>
+map <leader>fs :Snippets<CR>
+
+"DevDocs' Config
+map <leader>z :DevDocsUnderCursor<CR>
