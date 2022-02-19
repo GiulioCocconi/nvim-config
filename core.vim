@@ -25,12 +25,32 @@ else
 	set t_Co=256
 endif
 
-colorscheme minimalist
-
-
 function CurrentFileParentDir(level)
 	let l:fpath = split(expand('%:p'), "/")
 	let l:until = -2 - a:level
 	return "/" . join(l:fpath[0:l:until], "/") . "/"
+endfunction
 
+function CurrentFileSwap()
+	let l:fdir = expand('%:p')
+	let l:chunk = substitute(l:fdir, "/", "%", "g") . ".swp"
+	return "~/.local/share/nvim/swap//" . l:chunk
+endfunction
+
+function DeleteCurrentFileSwap()
+	let l:swapfile = CurrentFileSwap()
+	if !filereadable(expand(l:swapfile))
+		echom "This document hasn't got any swapfile"
+		return
+	endif
+
+	let l:choice = confirm(printf("Do you really want to delete %s? ", l:swapfile), "&No\n&yes")
+
+	if choice == 0
+		echo "Swap file not removed"
+		return
+	endif
+
+	silent! execute "!rm " . escape(l:swapfile, "%")
+	echo "Swap file removed"
 endfunction

@@ -26,15 +26,15 @@ function Debug(msg)
 	endif
 endfunction
 
-function LoadVimFile(fname)
+function LoadConfigFile(fname)
 	let l:fpath = stdpath('config') . '/' . a:fname
-	execute printf("source %s", l:fpath)
+	silent! execute printf("source %s", l:fpath)
+	call Debug(a:fname . " Loaded")
 endfunction
 
 function LoadAllConfig()
 	for l:fname in s:core_files
-		call LoadVimFile(l:fname)
-		call Debug(l:fname . " Loaded")
+		call LoadConfigFile(l:fname)
 	endfor
 	echom "Configuration files loaded!"
 endfunction
@@ -43,6 +43,10 @@ function RunInstallScript()
 	if has('unix')
 		echom "I'm running the setup script..."
 		execute printf('!bash %s %s %s', s:install_unix_script, stdpath('config'), stdpath('data'))
+
+		while empty(glob(s:install_check))
+		endwhile
+
 		return 1
 	else
 		echom "Your OS is not supported :("
@@ -53,10 +57,11 @@ endfunction
 function ReloadConfig(install_plugins)
 	let l:init_path = stdpath('config') . "/init.vim"
 	silent! execute printf("source %s", l:init_path)
-	call LoadAllConfig()
+	call LoadConfigFile("plugins.vim")
 	if a:install_plugins == 1
 		PlugInstall
 	endif
+	call LoadAllConfig()
 endfunction
 
 " Entry Point
@@ -67,7 +72,9 @@ if !empty(glob(s:install_check))
 	call LoadAllConfig()
 else
 	call Debug(s:install_check . " not found")
-	if RunInstallScript() == 1
+	call RunInstallScript()
+
+	if !empty(glob(s:install_check))
 		call ReloadConfig(1)
 	endif
 endif
