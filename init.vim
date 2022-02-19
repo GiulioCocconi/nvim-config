@@ -33,7 +33,6 @@ function LoadConfigFile(fname)
 endfunction
 
 function LoadAllConfig()
-	silent! source %
 	for l:fname in s:core_files
 		call LoadConfigFile(l:fname)
 	endfor
@@ -41,18 +40,13 @@ function LoadAllConfig()
 endfunction
 
 function RunInstallScript()
-	if has('unix')
-		echom "I'm running the setup script..."
-		execute printf('!bash %s %s %s', s:install_unix_script, stdpath('config'), stdpath('data'))
-
-		while empty(glob(s:install_check))
-		endwhile
-
-		return 1
-	else
-		echom "Your OS is not supported :("
+	if !has('unix')
+		echom "Your OS is not supported :(" "For now...
 		return 0
 	endif
+
+	echom "I'm running the setup script..."
+	execute printf('!bash %s %s %s', s:install_unix_script, stdpath('config'), stdpath('data'))
 endfunction
 
 function LoadFirstTime()
