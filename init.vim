@@ -33,6 +33,7 @@ function LoadConfigFile(fname)
 endfunction
 
 function LoadAllConfig()
+	silent! source %
 	for l:fname in s:core_files
 		call LoadConfigFile(l:fname)
 	endfor
@@ -54,13 +55,9 @@ function RunInstallScript()
 	endif
 endfunction
 
-function ReloadConfig(install_plugins)
-	let l:init_path = stdpath('config') . "/init.vim"
-	silent! execute printf("source %s", l:init_path)
+function LoadFirstTime()
 	call LoadConfigFile("plugins.vim")
-	if a:install_plugins == 1
-		PlugInstall
-	endif
+	PlugInstall
 	call LoadAllConfig()
 endfunction
 
@@ -75,7 +72,7 @@ else
 	call RunInstallScript()
 
 	if !empty(glob(s:install_check))
-		call ReloadConfig(1)
+		call LoadFirstTime()
 	endif
 endif
 
