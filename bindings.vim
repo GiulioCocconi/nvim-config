@@ -2,6 +2,7 @@ let mapleader = " " " Set leader to SPC
 set showcmd
 
 map <leader>rc :call ReloadConfig(0)<CR>
+map <leader>dt :call ToggleDebug()<CR>
 map <leader>sr :recover<CR>
 map <leader>sd :call DeleteCurrentFileSwap()<CR>
 map <leader><esc> :let @/ = ""<CR>
