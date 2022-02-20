@@ -19,18 +19,17 @@ if [[ -f $check_file ]]; then
 	exit 1
 fi
 
-echo "Welcome to the install script..."
-
+echo "Welcome to the install/upgrade script..."
+echo
 echo "Installing deps..."
 
 check_command "python3"
-check_command "rustc"
+check_command "perl"
+check_command "vifm"
 
 [[ $ready != 1 ]] && exit 1
 
 pip install pynvim
-cargo install broot
 
 echo "All done!!!"
 touch $check_file
-
