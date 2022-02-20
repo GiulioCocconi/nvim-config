@@ -1,7 +1,8 @@
 let mapleader = " " " Set leader to SPC
 set showcmd
 
-map <leader>rc :call ReloadConfig(0)<CR>
+map <leader>cr :call LoadAllConfig()<CR>
+map <leader>ce :execute ":Explore " . g:core_config_dir<CR>
 map <leader>dt :call ToggleDebug()<CR>
 map <leader>sr :recover<CR>
 map <leader>sd :call DeleteCurrentFileSwap()<CR>

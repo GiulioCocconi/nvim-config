@@ -42,9 +42,7 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 "Theme's config
-
 colorscheme rigel
-
 let g:airline_theme='rigel'
 let g:airline_symbols_ascii = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -74,13 +72,16 @@ function FindFileInput()
 	execute ':Files ' . l:fdir
 endfunction
 
-map <leader>ff :call FindFileInCurrentDir()<CR>
-map <leader>fF :Files<CR>
+map <leader>fz :call FindFileInCurrentDir()<CR>
+map <leader>fZ :Files<CR>
 map <leader>fb :Buffers<CR>
 map <leader>fc :Colors<CR>
 map <leader>ft :Tags<CR>
 map <leader>fC :Commands<CR>
 map <leader>fs :Snippets<CR>
+
+"Floaterm's Config
+map <leader>ff :FloatermNew vifm<CR>
 
 "DevDocs' Config
 map <leader>z :DevDocsUnderCursor<CR>

@@ -1,3 +1,4 @@
+let g:core_config_dir = stdpath('config') . "/core"
 let s:core_files = ['bindings.vim', 'plugins.vim', 'core.vim']
 
 let s:install_unix_script = stdpath('config') . '/install.sh'
@@ -27,7 +28,7 @@ function Debug(msg)
 endfunction
 
 function LoadConfigFile(fname)
-	let l:fpath = stdpath('config') . '/' . a:fname
+	let l:fpath = g:core_config_dir . '/' . a:fname
 	silent! execute printf("source %s", l:fpath)
 	call Debug(a:fname . " Loaded")
 endfunction
