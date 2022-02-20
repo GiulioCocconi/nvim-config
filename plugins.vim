@@ -25,14 +25,13 @@ Plug 'junegunn/fzf.vim'
 ""Theme
 "Plug 'dikiaap/minimalist'
 Plug 'Rigellute/rigel'
-
 Plug 'vim-airline/vim-airline'
-
 Plug 'rhysd/devdocs.vim'
-
 
 ""Rust
 Plug 'rust-lang/rust.vim'
+
+Plug 'embear/vim-localvimrc'
 
 call Debug("Plug end")
 call plug#end()
