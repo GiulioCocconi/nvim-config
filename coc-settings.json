@@ -1,3 +1,5 @@
 {
-	"suggest.maxCompleteItemCount": 5
+	"suggest.maxCompleteItemCount": 5,
+	"languageserver": {
+	}
 }

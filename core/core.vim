@@ -1,16 +1,15 @@
-set nocompatible
 set showmatch
 set ignorecase
-set hlsearch
 
 set tabstop=4       " number of visual spaces per TAB
 set softtabstop=4   " number of spaces in tab when editing
 set shiftwidth=4    " number of spaces to use for autoindent
-set autoindent
+
 set clipboard+=unnamedplus
+
 set number
 
-" In insertmode i numeri sono normali, in normalmode relativi
+"In INSERT numbers aren't relative 
 augroup numbertoggle
 	autocmd!
 	autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
@@ -54,3 +53,15 @@ function DeleteCurrentFileSwap()
 	silent! execute "!rm " . escape(l:swapfile, "%")
 	echo "Swap file removed"
 endfunction
+
+function CdCurrentBufferDir()
+	let l:parentDir=CurrentFileParentDir(0)
+	execute ":cd " . l:parentDir
+endfunction
+
+function ShowBindings()
+	let l:command=printf("grep -R --include='*.vim' --exclude-dir=autoload '^map <leader>' %s | grep -o -P '([a-zA-Z.]*:.*)' | less", stdpath('config'))
+	execute ":FloatermNew " . l:command
+endfunction
+
+

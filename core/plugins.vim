@@ -7,7 +7,6 @@ call plug#begin(stdpath('data') . '/plugins')
 call Debug("Plug begin")
 
 ""Ide-like functionality
-Plug 'vim-syntastic/syntastic' "syntax analyzer
 Plug 'neoclide/coc.nvim', {'branch': 'release'} "Completion framework
 Plug 'SirVer/ultisnips' "Snips framework
 Plug 'honza/vim-snippets'
@@ -40,12 +39,6 @@ call plug#end()
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_cpp_include_dirs = []
-let g:syntastic_cpp_no_default_include_dirs = 0
 
 "Theme's config
 colorscheme rigel
@@ -79,15 +72,14 @@ function FindFileInput()
 endfunction
 
 map <leader>fz :call FindFileInCurrentDir()<CR>
-map <leader>fZ :Files<CR>
-map <leader>fb :Buffers<CR>
-map <leader>fc :Colors<CR>
-map <leader>ft :Tags<CR>
-map <leader>fC :Commands<CR>
-map <leader>fs :Snippets<CR>
+map <leader>fZ :Files<CR>| "FZF fuzzy find
+map <leader>fb :Buffers<CR>| "FZF find buffers
+map <leader>ft :Tags<CR>| "FZF find tags
+map <leader>fC :Commands<CR>| "FZF find commands
 
 "Floaterm's Config
-map <leader>ff :FloatermNew vifm<CR>
+map <leader>ff :FloatermNew vifm<CR>| "Open vifm in floaterm
+map <leader>' :FloatermToggle<CR>
 
 "DevDocs' Config
 map <leader>z :DevDocsUnderCursor<CR>

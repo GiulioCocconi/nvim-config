@@ -3,7 +3,7 @@
 config_dir=$1
 data_dir=$2
 
-check_file="$config_dir/.installed"
+check_file=$3
 
 ready=1
 
