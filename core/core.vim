@@ -59,7 +59,7 @@ function CdCurrentBufferDir()
 	execute ":cd " . l:parentDir
 endfunction
 
-function ShowBindings()
+function ShowLeaderBindings()
 	let l:command=printf("grep -R --include='*.vim' --exclude-dir=autoload '^map <leader>' %s | grep -o -P '([a-zA-Z.]*:.*)' | less", stdpath('config'))
 	execute ":FloatermNew " . l:command
 endfunction

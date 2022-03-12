@@ -7,25 +7,20 @@ let s:install_check = stdpath('config') . '/.installed'
 let s:debug_file = stdpath('config') . '/.debug'
 
 "Debug
-function CheckDebug()
-	let g:init_debug = !empty(glob(s:debug_file))
-endfunction
-
 function ToggleDebug()
-	if g:init_debug
+	if !empty(glob(s:debug_file))
 		echom "Debug deactivated"
 		silent! execute "!rm " . s:debug_file
 	else
 		echom "Debug activated"
 		silent! execute "!touch " . s:debug_file
 	endif
-	call CheckDebug()
 endfunction
 
 command Td :call ToggleDebug()
 
 function Debug(msg)
-	if g:init_debug == 1
+	if !empty(glob(s:debug_file))
 		echom "[Debug] " . a:msg
 	endif
 endfunction
@@ -70,8 +65,8 @@ endfunction
 
 
 " Entry Point
-call CheckDebug()
 call Debug("Checking for the presence of " . s:install_check)
+
 if !empty(glob(s:install_check))
 	call Debug(s:install_check . " found")
 	call LoadAllConfig()
@@ -79,8 +74,8 @@ else
 	call Debug(s:install_check . " not found")
 	call RunInstallScript()
 
-
 	if !empty(glob(s:install_check))
+		call Debug("Loading the config for the first time...")
 		call LoadFirstTime()
 	endif
 endif
