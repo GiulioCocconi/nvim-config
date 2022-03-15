@@ -6,6 +6,7 @@ These are my [NeoVim](https://neovim.io) config files.
 ### Features
 
 - [vim-plug](https://github.com/junegunn/vim-plug) as plugin manager
+- [coc.nvim](https://github.com/neoclide/coc.nvim) as completion framework
 - [fzf.vim](https://github.com/junegunn/fzf.vim) as file finder
 - [vim-startify](https://github.com/mhinz/vim-startify) as greeter
 - [rigel](https://github.com/Rigellute/rigel) and [airline](https://github.com/vim-airline/vim-airline) for theming
