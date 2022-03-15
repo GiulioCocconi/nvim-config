@@ -74,7 +74,7 @@ function CheckUpdates(isRequiredByUser)
 
 	if (l:hasUpdate)
 
-		if (confirm("Update found. Install it?", "&Yes\n&No"))
+		if (confirm("Update found. Install it?", "&Yes\n&No") - 1)
 			echom "I'm not installing it"
 			return
 		endif
@@ -140,4 +140,3 @@ else
 	call Debug(s:install_check . " not found")
 	call InstallConfig()
 endif
-
