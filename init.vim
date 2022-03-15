@@ -35,6 +35,8 @@ function CheckUpdates()
 	call Debug("Checking for updates...")
 	
 	let l:git_command = printf("git -C %s ", stdpath('config'))
+	
+	call system(l:git_command . "fetch")
 
 	let l:local_rev = system(l:git_command . "rev-parse @") 
 	let l:remote_rev = system(l:git_command . "rev-parse '@{u}'")
