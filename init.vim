@@ -34,12 +34,12 @@ endfunction
 function CheckUpdates()
 	call Debug("Checking for updates...")
 	
-	let l:git_command = printf("git -C %s rev-parse", stdpath('config'))
+	let l:git_command = printf("git -C %s ", stdpath('config'))
 
-	let l:local_rev = system(l:git_command . " HEAD") 
-	let l:remote_rev = system(l:git_command . " $(git branch -r --sort=committerdate | tail -1)")
+	let l:local_rev = system(l:git_command . "rev-parse @") 
+	let l:base = system(l:git_command . "merge-base @ '@{u}'")
 
-	let l:hasUpdate = l:local_rev != l:remote_rev
+	let l:hasUpdate = l:local_rev == l:base
 
 	if (l:hasUpdate)
 		call Debug("Update found")

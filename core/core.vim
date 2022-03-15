@@ -24,6 +24,9 @@ else
 	set t_Co=256
 endif
 
+
+let g:autoUpdate = 1 
+
 function CurrentFileParentDir(level)
 	let l:fpath = split(expand('%:p'), "/")
 	let l:until = -2 - a:level
