@@ -1,14 +1,14 @@
 # GiulioCocconi's NeoVim Config
 
 These are my [NeoVim](https://neovim.io) config files. 
-`init.vim` is the entrypoint and it loads the others `.vim` files in the directory.
+`init.vim` is the entrypoint and it loads the others `.vim` files in the `core` directory.
 
 ### Features
 
 - [vim-plug](https://github.com/junegunn/vim-plug) as plugin manager
 - [fzf.vim](https://github.com/junegunn/fzf.vim) as file finder
 - [vim-startify](https://github.com/mhinz/vim-startify) as greeter
-- [minimalist](https://github.com/dikiaap/minimalist) and [airline](https://github.com/vim-airline/vim-airline) for theming
+- [rigel](https://github.com/Rigellute/rigel) and [airline](https://github.com/vim-airline/vim-airline) for theming
 - Useful bindings
 - ...
 
