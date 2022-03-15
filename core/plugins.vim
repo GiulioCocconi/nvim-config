@@ -8,8 +8,7 @@ call Debug("Plug begin")
 
 ""Ide-like functionality
 Plug 'neoclide/coc.nvim', {'branch': 'release'} "Completion framework
-Plug 'SirVer/ultisnips' "Snips framework
-Plug 'honza/vim-snippets'
+Plug 'godlygeek/tabular'
 Plug 'majutsushi/tagbar' "Tags manager
 Plug 'jiangmiao/auto-pairs'
 Plug 'voldikss/vim-floaterm' "Floating term and windows manager
