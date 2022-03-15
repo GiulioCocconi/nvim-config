@@ -10,6 +10,7 @@ These are my [NeoVim](https://neovim.io) config files.
 - [fzf.vim](https://github.com/junegunn/fzf.vim) as file finder
 - [vim-startify](https://github.com/mhinz/vim-startify) as greeter
 - [rigel](https://github.com/Rigellute/rigel) and [airline](https://github.com/vim-airline/vim-airline) for theming
+- Autoupdate
 - Useful bindings
 - ...
 
