@@ -31,29 +31,6 @@ function Debug(msg)
 	endif
 endfunction
 
-function CheckUpdates()
-	call Debug("Checking for updates...")
-	
-	let l:git_command = printf("git -C %s ", stdpath('config'))
-	
-	call system(l:git_command . "fetch")
-
-	let l:local_rev = system(l:git_command . "rev-parse @") 
-	let l:remote_rev = system(l:git_command . "rev-parse '@{u}'")
-	let l:base = system(l:git_command . "merge-base @ '@{u}'")
-
-	let l:hasUpdate = l:local_rev != l:remote_rev && l:local_rev == l:base
-
-	if (l:hasUpdate)
-		call Debug("Update found")
-	else
-		call Debug("Nvim is already updated")
-	endif
-
-	return l:hasUpdate
-
-endfunction
-
 "Load Config
 function LoadConfigFile(fname)
 	let l:fpath = g:core_config_dir . '/' . a:fname
@@ -67,40 +44,88 @@ function LoadAllConfig()
 	endfor
 	echom "Configuration files loaded!"
 
-	if (g:autoUpdate && CheckUpdates())
-		echom "Installing an update..."
-		execute printf('!bash %s %s', s:update_script, s:install_args)
-		call QuitAfterInstall()
-	endif
+	call CheckUpdates(0)
 
 endfunction
+
+" Install functions
+
+function CheckUpdates(isRequiredByUser)
+	if (!(g:autoUpdate || a:isRequiredByUser))
+		return
+	endif
+
+	if (a:isRequiredByUser)
+		echom "Checking for updates"
+	else
+		call Debug("Checking for updates...")
+	endif
+
+
+	let l:git_command = printf("git -C %s ", stdpath('config'))
+
+	silent! call system(l:git_command . "fetch")
+
+	let l:local_rev = system(l:git_command . "rev-parse @") 
+	let l:remote_rev = system(l:git_command . "rev-parse '@{u}'")
+	let l:base = system(l:git_command . "merge-base @ '@{u}'")
+
+	let l:hasUpdate = l:local_rev != l:remote_rev && l:local_rev == l:base
+
+	if (l:hasUpdate)
+
+		if (confirm("Update found. Install it?", "&Yes\n&No"))
+			echom "I'm not installing it"
+			return
+		endif
+
+		echom "Installing update..."
+		execute printf('!bash %s %s', s:update_script, s:install_args)
+		call QuitAfterInstall()
+	else
+		if (a:isRequiredByUser)
+			echom "Nvim is already updated"
+		else
+			call Debug("Nvim is already updated")
+		endif
+	endif
+endfunction
+
+command UpdateConfig call CheckUpdates(1) 
+
 
 function LoadFirstTime()
 	call LoadConfigFile("plugins.vim")
 	PlugInstall
 	call LoadAllConfig()
+	call QuitAfterInstall()
 endfunction
+
 
 function QuitAfterInstall()
-		echom "Install finished, quitting vim..."
-		sleep 1
-		qall
+	echom "Install finished, quitting vim..."
+	sleep 1
+	qall
 endfunction
 
-"Install script
-function RunInstallScript()
+function InstallConfig()
 	if !has('unix')
 		echom "Your OS is not supported :(" "For now...
-		return 0
+		return
 	endif
 
 	if !has('nvim')
 		echom "Please use nvim!"
-		return 0
+		return
 	endif
 
 	echom "I'm running the setup script..."
 	execute printf('!bash %s %s', s:install_unix_script, s:install_args)
+
+	if !empty(glob(s:install_check))
+		call Debug("Loading the config for the first time...")
+		call LoadFirstTime()
+	endif
 endfunction
 
 
@@ -109,17 +134,10 @@ call Debug("Checking for the presence of " . s:install_check)
 
 if !empty(glob(s:install_check))
 	call Debug(s:install_check . " found")
-
 	call LoadAllConfig()
 
 else
 	call Debug(s:install_check . " not found")
-	call RunInstallScript()
-
-	if !empty(glob(s:install_check))
-		call Debug("Loading the config for the first time...")
-		call LoadFirstTime()
-		call QuitAfterInstall()
-	endif
+	call InstallConfig()
 endif
 
