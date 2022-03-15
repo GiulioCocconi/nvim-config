@@ -19,3 +19,5 @@ You can install the configuration running
 git clone --depth=1 https://github.com/GiulioCocconi/nvim-config ~/.config/nvim
 ```
 But I instead recommend copying the lines of your interest in YOUR config
+
+Enjoy!
