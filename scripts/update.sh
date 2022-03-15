@@ -1,4 +1,5 @@
 #!/bin/bash
+echo
 echo "Updating NVIM config..."
 
 NVIM_CONFIG_DIR=$1

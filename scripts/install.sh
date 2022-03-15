@@ -1,4 +1,5 @@
 #!/bin/bash
+echo
 
 config_dir=$1
 scripts_dir=$2
