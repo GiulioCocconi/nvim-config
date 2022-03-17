@@ -81,6 +81,7 @@ function CheckUpdates(isRequiredByUser)
 
 		echom "Installing update..."
 		execute printf('!bash %s %s', s:update_script, s:install_args)
+		PlugClean! | PlugUpdate
 		call QuitAfterInstall()
 	else
 		if (a:isRequiredByUser)
