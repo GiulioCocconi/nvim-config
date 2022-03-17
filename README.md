@@ -17,7 +17,7 @@ These are my [NeoVim](https://neovim.io) config files.
 ### How to install it (LINUX ONLY)
 You can install the configuration running
 ```
-git clone --depth=1 https://github.com/GiulioCocconi/nvim-config ~/.config/nvim && nvim
+git clone --depth=1 https://github.com/GiulioCocconi/nvim-config ~/.config/nvim && nvim && nvim
 ```
 But I instead recommend copying the lines of your interest in YOUR config
 
