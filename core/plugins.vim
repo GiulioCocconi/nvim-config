@@ -6,38 +6,42 @@ augroup end
 call plug#begin(stdpath('data') . '/plugins')
 call Debug("Plug begin")
 
+Plug 'nathom/filetype.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-treesitter/nvim-treesitter'
+
 ""Ide-like functionality
 Plug 'neoclide/coc.nvim', {'branch': 'release'} "Completion framework
 Plug 'godlygeek/tabular'
 Plug 'majutsushi/tagbar' "Tags manager
 Plug 'jiangmiao/auto-pairs'
+Plug 'numToStr/Comment.nvim'
 Plug 'voldikss/vim-floaterm' "Floating term and windows manager
+Plug 'embear/vim-localvimrc'
 
 "Greeter
-Plug 'mhinz/vim-startify'
+"Plug 'mhinz/vim-startify'
+Plug 'glepnir/dashboard-nvim'
 
 ""fzf
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-""Theme
+Plug 'itchyny/calendar.vim'
+
+"Theme
 "Plug 'dikiaap/minimalist'
 Plug 'Rigellute/rigel'
 Plug 'vim-airline/vim-airline'
+
 Plug 'rhysd/devdocs.vim'
 
 ""Rust
 Plug 'rust-lang/rust.vim'
 
-Plug 'embear/vim-localvimrc'
 
 call Debug("Plug end")
 call plug#end()
-
-"Snippets and compl
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 "Theme's config
 colorscheme rigel
@@ -45,6 +49,17 @@ let g:airline_theme='rigel'
 let g:airline_symbols_ascii = 1
 let g:airline#extensions#tabline#enabled = 1
 
+"Dashboard's config
+let g:dashboard_default_executive ='fzf'
+map <Leader>ss :<C-u>SessionSave<CR>
+map <Leader>sl :<C-u>SessionLoad<CR>
+
+map <silent> <Leader>fh :DashboardFindHistory<CR>
+map <silent> <Leader>ff :DashboardFindFile<CR>
+map <silent> <Leader>tc :DashboardChangeColorscheme<CR>
+map <silent> <Leader>fa :DashboardFindWord<CR>
+map <silent> <Leader>fb :DashboardJumpMark<CR>
+map <silent> <Leader>cn :DashboardNewFile<CR>
 
 "FZF's config
 function FindFileInCurrentDir()
@@ -78,8 +93,11 @@ map <leader>ft :Tags<CR>| "FZF find tags
 map <leader>fC :Commands<CR>| "FZF find commands
 
 "Floaterm's Config
-map <leader>ff :FloatermNew vifm<CR>| "Open vifm in floaterm
+"map <leader>ff :FloatermNew vifm<CR>| "Open vifm in floaterm
 map <leader>' :FloatermToggle<CR>
+
+"Comment.vim config
+lua require('Comment').setup()
 
 "DevDocs' Config
 map <leader>z :DevDocsUnderCursor<CR>
