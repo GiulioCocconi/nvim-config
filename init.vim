@@ -119,6 +119,11 @@ function InstallConfig()
 		return
 	endif
 
+	if !has('nvim-0.6.0')
+		echom "Please use nvim >= 0.6.0"
+		return
+	endif
+
 	echom "I'm running the setup script..."
 	execute printf('!bash %s %s', s:install_unix_script, s:install_args)
 
