@@ -12,6 +12,8 @@ let s:install_args = printf("%s %s %s", stdpath('config'), s:scripts_dir, s:inst
 
 let s:debug_file = stdpath('config') . '/.debug'
 
+let s:last_update_check_file = stdpath('config') . '/.lastUpdateCheckTime'
+
 "Debug
 function ToggleDebug()
 	if !empty(glob(s:debug_file))
@@ -50,17 +52,43 @@ endfunction
 
 " Install functions
 
+function CheckUpdateTimeCondition()
+
+	if empty(glob(s:last_update_check_file))
+		silent! execute "!touch " . s:last_update_check_file
+		call writefile(["0"], s:last_update_check_file)
+	endif
+	
+	if (!g:autoUpdate)
+		return 0
+	endif
+
+	let l:local_t = localtime()
+	let l:last_t = str2nr(readfile(s:last_update_check_file)[0])
+	
+	call Debug("Last update check in EPOCH " . l:last_t)
+	
+	let l:diff_t = l:local_t - l:last_t
+
+	call Debug("EPOCH diff: " . l:diff_t)
+
+	return l:diff_t >= 604800
+
+endfunction
+
 function CheckUpdates(isRequiredByUser)
-	if (!(g:autoUpdate || a:isRequiredByUser))
+	
+	if (!(a:isRequiredByUser || CheckUpdateTimeCondition()))
 		return
 	endif
 
 	if (a:isRequiredByUser)
-		echom "Checking for updates"
+		echom "Checking for updates..."
 	else
 		call Debug("Checking for updates...")
 	endif
 
+	call writefile([localtime()], s:last_update_check_file)
 
 	let l:git_command = printf("git -C %s ", stdpath('config'))
 
@@ -80,7 +108,8 @@ function CheckUpdates(isRequiredByUser)
 		endif
 
 		echom "Installing update..."
-		execute printf('!bash %s %s', s:update_script, s:install_args)
+
+		system(printf('bash %s %s', s:update_script, s:install_args))
 		PlugClean! | PlugUpdate
 		call QuitAfterInstall()
 	else
@@ -96,6 +125,7 @@ command UpdateConfig call CheckUpdates(1)
 
 
 function LoadFirstTime()
+	call Debug("Loading the config for the first time...")
 	call LoadConfigFile("plugins.vim")
 	PlugInstall
 	call LoadAllConfig()
@@ -105,7 +135,7 @@ endfunction
 
 function QuitAfterInstall()
 	echom "Install finished, quitting vim..."
-	sleep 1
+	sleep 2
 	qall
 endfunction
 
@@ -126,10 +156,9 @@ function InstallConfig()
 	endif
 
 	echom "I'm running the setup script..."
-	execute printf('!bash %s %s', s:install_unix_script, s:install_args)
+	system(printf('bash %s %s', s:install_unix_script, s:install_args))
 
 	if !empty(glob(s:install_check))
-		call Debug("Loading the config for the first time...")
 		call LoadFirstTime()
 	endif
 endfunction
