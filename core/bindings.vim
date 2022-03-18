@@ -5,7 +5,7 @@ map <leader>ce :execute ":Explore " . g:core_config_dir<CR>| "Opens the config d
 map <leader>cd :call CdCurrentBufferDir()<CR>
 map <leader>sr :recover<CR>| " Recovers the swap file
 map <leader>sd :call DeleteCurrentFileSwap()<CR>
-map <leader><esc> :let @/ = ""<CR>| "Clears search highlight
+map <leader><esc> :nohlsearch<CR>| "Clears search highlight
 
 map <leader>bk :bwipeout<CR>
 map <leader>bl :buffers<CR>
