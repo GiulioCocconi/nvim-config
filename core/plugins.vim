@@ -3,24 +3,37 @@ augroup reload_plug_config
 	autocmd BufWritePost plugins.vim source <afile> | PlugInstall
 augroup end
 
+function! UpdateRemotePlugins(...)
+	" Needed to refresh runtime files
+	let &rtp=&rtp
+	UpdateRemotePlugins
+endfunction
+
+
 call plug#begin(stdpath('data') . '/plugins')
 call Debug("Plug begin")
 
-Plug 'nathom/filetype.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nathom/filetype.nvim' "Faster load time
+Plug 'nvim-treesitter/nvim-treesitter',  {'do': ':TSUpdate'} "Better highlighting
+Plug 'nvim-lua/plenary.nvim' "Dep for a lot of plugins
+Plug 'karb94/neoscroll.nvim' "Smoother scroll
+Plug 'kyazdani42/nvim-web-devicons' " for file icons
+Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') } "Completion in the wild menu
+Plug 'lambdalisue/suda.vim' "Write files using `sudo`
 
-""Ide-like functionality
+"Ide-like functionality
 Plug 'neoclide/coc.nvim', {'branch': 'release'} "Completion framework
-Plug 'godlygeek/tabular'
+Plug 'godlygeek/tabular' "Line up text 
 Plug 'majutsushi/tagbar' "Tags manager
-Plug 'jiangmiao/auto-pairs'
-Plug 'numToStr/Comment.nvim'
+Plug 'jiangmiao/auto-pairs' 
+Plug 'numToStr/Comment.nvim' "Comment more line of code with one keystroke
 Plug 'voldikss/vim-floaterm' "Floating term and windows manager
-Plug 'embear/vim-localvimrc'
+Plug 'embear/vim-localvimrc' "Load local config in working directory
+Plug 'kyazdani42/nvim-tree.lua' "Tree of project files
+Plug 'mg979/vim-visual-multi' "Multicursor
+Plug 'rhysd/devdocs.vim'
 
 "Greeter
-"Plug 'mhinz/vim-startify'
 Plug 'glepnir/dashboard-nvim'
 
 ""fzf
@@ -34,14 +47,15 @@ Plug 'itchyny/calendar.vim'
 Plug 'Rigellute/rigel'
 Plug 'vim-airline/vim-airline'
 
-Plug 'rhysd/devdocs.vim'
-
 ""Rust
 Plug 'rust-lang/rust.vim'
 
+Plug 'preservim/vim-markdown'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 call Debug("Plug end")
 call plug#end()
+
 
 "Theme's config
 colorscheme rigel
@@ -51,8 +65,20 @@ let g:airline#extensions#tabline#enabled = 1
 
 "Dashboard's config
 let g:dashboard_default_executive ='fzf'
+let g:dashboard_custom_header = [
+			\'',
+			\'  ██████╗       ██████╗     █╗  ███████╗     ███╗   ██╗ ██╗   ██╗ ██╗ ███╗   ███╗ ',
+			\' ██╔════╝      ██╔════╝     ╚╝  ██╔════╝     ████╗  ██║ ██║   ██║ ██║ ████╗ ████║ ',
+			\' ██║  ███╗     ██║              ███████╗     ██╔██╗ ██║ ██║   ██║ ██║ ██╔████╔██║ ',
+			\' ██║   ██║     ██║              ╚════██║     ██║╚██╗██║ ╚██╗ ██╔╝ ██║ ██║╚██╔╝██║ ',
+			\' ╚██████╔╝ ██╗ ╚██████╗ ██╗     ███████║     ██║ ╚████║  ╚████╔╝  ██║ ██║ ╚═╝ ██║ ',
+			\'  ╚═════╝  ╚═╝  ╚═════╝ ╚═╝     ╚══════╝     ╚═╝  ╚═══╝   ╚═══╝   ╚═╝ ╚═╝     ╚═╝ ',
+			\] 
+
 map <Leader>ss :<C-u>SessionSave<CR>
 map <Leader>sl :<C-u>SessionLoad<CR>
+
+
 
 map <silent> <Leader>fh :DashboardFindHistory<CR>
 map <silent> <Leader>ff :DashboardFindFile<CR>
@@ -60,6 +86,13 @@ map <silent> <Leader>tc :DashboardChangeColorscheme<CR>
 map <silent> <Leader>fa :DashboardFindWord<CR>
 map <silent> <Leader>fb :DashboardJumpMark<CR>
 map <silent> <Leader>cn :DashboardNewFile<CR>
+
+"Wilder's config
+call wilder#setup({'modes': [':', '/', '?']})
+
+"Tree's config
+lua require'nvim-tree'.setup()
+map <leader>t :NvimTreeToggle<CR>
 
 "FZF's config
 function FindFileInCurrentDir()

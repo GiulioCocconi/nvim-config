@@ -1,7 +1,7 @@
 let g:core_config_dir = stdpath('config') . "/core"
 let s:scripts_dir = stdpath('config') . "/scripts"
 
-let g:core_files = ['bindings.vim', 'plugins.vim', 'core.vim']
+let g:core_files = ['core.vim', 'bindings.vim', 'plugins.vim'] 
 
 let s:update_script = s:scripts_dir . '/update.sh'
 let s:install_unix_script = s:scripts_dir . '/install.sh'
@@ -109,7 +109,7 @@ function CheckUpdates(isRequiredByUser)
 
 		echom "Installing update..."
 
-		system(printf('bash %s %s', s:update_script, s:install_args))
+		execute printf('!bash %s %s', s:update_script, s:install_args)
 		PlugClean! | PlugUpdate
 		call QuitAfterInstall()
 	else
@@ -135,8 +135,10 @@ endfunction
 
 function QuitAfterInstall()
 	echom "Install finished, quitting vim..."
-	sleep 2
-	qall
+	if empty(glob(s:debug_file))
+		sleep 2
+		qall
+	endif
 endfunction
 
 function InstallConfig()
@@ -156,7 +158,7 @@ function InstallConfig()
 	endif
 
 	echom "I'm running the setup script..."
-	system(printf('bash %s %s', s:install_unix_script, s:install_args))
+	execute printf('!bash %s %s', s:install_unix_script, s:install_args)
 
 	if !empty(glob(s:install_check))
 		call LoadFirstTime()
