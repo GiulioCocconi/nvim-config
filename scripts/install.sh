@@ -24,7 +24,9 @@ echo
 echo "Installing deps..."
 
 check_command "python3"
+check_command "pip"
 check_command "node"
+check_command "yarn"
 check_command "perl"
 check_command "vifm"
 

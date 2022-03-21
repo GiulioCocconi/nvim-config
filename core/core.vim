@@ -9,6 +9,8 @@ set clipboard+=unnamedplus
 
 set number
 
+set signcolumn=number
+
 "In INSERT numbers aren't relative 
 augroup numbertoggle
 	autocmd!

@@ -1,7 +1,8 @@
 let g:core_config_dir = stdpath('config') . "/core"
 let s:scripts_dir = stdpath('config') . "/scripts"
+let s:plugin_config_dir = stdpath('config') . "/plugins"
 
-let g:core_files = ['core.vim', 'bindings.vim', 'plugins.vim'] 
+let g:core_files = ['core.vim', 'bindings.vim', 'plugins.vim']
 
 let s:update_script = s:scripts_dir . '/update.sh'
 let s:install_unix_script = s:scripts_dir . '/install.sh'
@@ -36,14 +37,24 @@ endfunction
 "Load Config
 function LoadConfigFile(fname)
 	let l:fpath = g:core_config_dir . '/' . a:fname
-	silent! execute printf("source %s", l:fpath)
+	execute "source" . l:fpath
 	call Debug(a:fname . " Loaded")
+endfunction
+
+function LoadPluginsConfig()
+	for l:file in glob(s:plugin_config_dir . "/*.vim", 1, 1)
+		call Debug(l:file . " plugin config loaded")
+		execute "source " . l:file
+	endfor
 endfunction
 
 function LoadAllConfig()
 	for l:fname in g:core_files
 		call LoadConfigFile(l:fname)
 	endfor
+	
+	call LoadPluginsConfig()
+
 	echom "Configuration files loaded!"
 
 	call CheckUpdates(0)
@@ -58,16 +69,16 @@ function CheckUpdateTimeCondition()
 		silent! execute "!touch " . s:last_update_check_file
 		call writefile(["0"], s:last_update_check_file)
 	endif
-	
+
 	if (!g:autoUpdate)
 		return 0
 	endif
 
 	let l:local_t = localtime()
 	let l:last_t = str2nr(readfile(s:last_update_check_file)[0])
-	
+
 	call Debug("Last update check in EPOCH " . l:last_t)
-	
+
 	let l:diff_t = l:local_t - l:last_t
 
 	call Debug("EPOCH diff: " . l:diff_t)
@@ -77,7 +88,7 @@ function CheckUpdateTimeCondition()
 endfunction
 
 function CheckUpdates(isRequiredByUser)
-	
+
 	if (!(a:isRequiredByUser || CheckUpdateTimeCondition()))
 		return
 	endif
@@ -94,11 +105,11 @@ function CheckUpdates(isRequiredByUser)
 
 	silent! call system(l:git_command . "fetch")
 
-	let l:local_rev = system(l:git_command . "rev-parse @") 
+	let l:local_rev = system(l:git_command . "rev-parse @")
 	let l:remote_rev = system(l:git_command . "rev-parse '@{u}'")
 	let l:base = system(l:git_command . "merge-base @ '@{u}'")
 
-	let l:hasUpdate = l:local_rev != l:remote_rev && l:local_rev == l:base
+ l:hasUpdate = l:local_rev != l:remote_rev && l:local_rev == l:base
 
 	if (l:hasUpdate)
 
@@ -110,7 +121,7 @@ function CheckUpdates(isRequiredByUser)
 		echom "Installing update..."
 
 		execute printf('!bash %s %s', s:update_script, s:install_args)
-		PlugClean! | PlugUpdate
+		PlugClean! | PlugUpdate | UpdateRemotePlugins
 		call QuitAfterInstall()
 	else
 		if (a:isRequiredByUser)
@@ -121,13 +132,13 @@ function CheckUpdates(isRequiredByUser)
 	endif
 endfunction
 
-command UpdateConfig call CheckUpdates(1) 
+command UpdateConfig call CheckUpdates(1)
 
 
 function LoadFirstTime()
 	call Debug("Loading the config for the first time...")
 	call LoadConfigFile("plugins.vim")
-	PlugInstall
+	PlugInstall | UpdateRemotePlugins
 	call LoadAllConfig()
 	call QuitAfterInstall()
 endfunction
@@ -167,6 +178,7 @@ endfunction
 
 
 " Entry Point
+runtime! plugin/rplugin.vim
 call Debug("Checking for the presence of " . s:install_check)
 
 if !empty(glob(s:install_check))
