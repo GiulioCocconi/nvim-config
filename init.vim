@@ -52,7 +52,7 @@ function LoadAllConfig()
 	for l:fname in g:core_files
 		call LoadConfigFile(l:fname)
 	endfor
-	
+
 	call LoadPluginsConfig()
 
 	echom "Configuration files loaded!"
@@ -109,7 +109,7 @@ function CheckUpdates(isRequiredByUser)
 	let l:remote_rev = system(l:git_command . "rev-parse '@{u}'")
 	let l:base = system(l:git_command . "merge-base @ '@{u}'")
 
- l:hasUpdate = l:local_rev != l:remote_rev && l:local_rev == l:base
+	let l:hasUpdate = l:local_rev != l:remote_rev && l:local_rev == l:base
 
 	if (l:hasUpdate)
 
