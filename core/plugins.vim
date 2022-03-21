@@ -1,6 +1,6 @@
 augroup reload_plug_config
 	autocmd!
-	autocmd BufWritePost plugins.vim source <afile> | PlugInstall
+	autocmd BufWritePost plugins.vim source <afile> | PlugInstall | call LoadPluginsConfig() 
 augroup end
 
 call plug#begin(stdpath('data') . '/plugins')
@@ -27,6 +27,7 @@ Plug 'embear/vim-localvimrc' "Load local config in working directory
 Plug 'kyazdani42/nvim-tree.lua' "Tree of project files
 Plug 'mg979/vim-visual-multi' "Multicursor
 Plug 'rhysd/devdocs.vim'
+Plug 'folke/todo-comments.nvim'
 
 "Greeter
 Plug 'glepnir/dashboard-nvim'
